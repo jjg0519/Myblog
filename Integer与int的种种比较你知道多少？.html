@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><title>Integer与int的种种比较你知道多少？</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3037" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3038" class="wmd-preview-section preview-content">
+
+<h1 id="integer与int的种种比较你知道多少">Integer与int的种种比较你知道多少？</h1>
+
+<p>　　如果面试官问Integer与int的区别：估计大多数人只会说道两点，Ingeter是int的包装类，int的初值为0，Ingeter的初值为null。但是如果面试官再问一下Integer i = 1;int ii = 1; i==ii为true还是为false？估计就有一部分人答不出来了，如果再问一下其他的，估计更多的人会头脑一片混乱。所以我对它们进行了总结，希望对大家有帮助。</p>
+
+<p>　　首先看代码：</p>
+
+<p>复制代码</p>
+
+</div><div id="wmd-preview-section-3039" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs cpp"><span class="hljs-comment line-number">1.</span>package com.test;<br><span class="hljs-comment line-number">2.</span><span class="hljs-comment">/**<br><span class="hljs-comment line-number">3.</span> * <br><span class="hljs-comment line-number">4.</span> * @author 刘玲<br><span class="hljs-comment line-number">5.</span> *<br><span class="hljs-comment line-number">6.</span> */</span><br><span class="hljs-comment line-number">7.</span><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> TestInteger {<br><span class="hljs-comment line-number">8.</span><br><span class="hljs-comment line-number">9.</span>    <span class="hljs-comment">/**<br><span class="hljs-comment line-number">10.</span>     * @param args<br><span class="hljs-comment line-number">11.</span>     */</span><br><span class="hljs-comment line-number">12.</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br><span class="hljs-comment line-number">13.</span>        <span class="hljs-keyword">int</span> i = <span class="hljs-number">128</span>;<br><span class="hljs-comment line-number">14.</span>        Integer i2 = <span class="hljs-number">128</span>;<br><span class="hljs-comment line-number">15.</span>        Integer i3 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">128</span>);<br><span class="hljs-comment line-number">16.</span>        <span class="hljs-comment">//Integer会自动拆箱为int，所以为true</span><br><span class="hljs-comment line-number">17.</span>        System.out.println(i == i2);<br><span class="hljs-comment line-number">18.</span>        System.out.println(i == i3);<br><span class="hljs-comment line-number">19.</span>        System.out.println(<span class="hljs-string">"**************"</span>);<br><span class="hljs-comment line-number">20.</span>        Integer i5 = <span class="hljs-number">127</span>;<span class="hljs-comment">//java在编译的时候,被翻译成-&gt; Integer i5 = Integer.valueOf(127);</span><br><span class="hljs-comment line-number">21.</span>        Integer i6 = <span class="hljs-number">127</span>;<br><span class="hljs-comment line-number">22.</span>        System.out.println(i5 == i6);<span class="hljs-comment">//true</span><br><span class="hljs-comment line-number">23.</span>        <span class="hljs-comment">/*Integer i5 = 128;<br><span class="hljs-comment line-number">24.</span>        Integer i6 = 128;<br><span class="hljs-comment line-number">25.</span>        System.out.println(i5 == i6);//false<br><span class="hljs-comment line-number">26.</span>*/</span>        Integer ii5 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">127</span>);<br><span class="hljs-comment line-number">27.</span>        System.out.println(i5 == ii5); <span class="hljs-comment">//false</span><br><span class="hljs-comment line-number">28.</span>        Integer i7 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">128</span>);<br><span class="hljs-comment line-number">29.</span>        Integer i8 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">123</span>);<br><span class="hljs-comment line-number">30.</span>        System.out.println(i7 == i8);  <span class="hljs-comment">//false</span><br><span class="hljs-comment line-number">31.</span>    }<br><span class="hljs-comment line-number">32.</span><br><span class="hljs-comment line-number">33.</span>}<br></code></pre>
+
+<p>复制代码 <br>
+首先，17行和18行输出结果都为true,因为Integer和int比都会自动拆箱（jdk1.5以上）。</p>
+
+<p>22行的结果为true,而25行则为false,很多人都不动为什么。其实java在编译Integer i5 = 127的时候,被翻译成-&gt; Integer i5 = Integer.valueOf(127);所以关键就是看valueOf()函数了。只要看看valueOf()函数的源码就会明白了。JDK源码的valueOf函数式这样的：</p>
+
+</div><div id="wmd-preview-section-3040" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs aspectj"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-function">Integer <span class="hljs-title">valueOf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span> </span>{<br><span class="hljs-comment line-number">2.</span>       <span class="hljs-keyword">assert</span> IntegerCache.high &gt;= <span class="hljs-number">127</span>;<br><span class="hljs-comment line-number">3.</span>       <span class="hljs-keyword">for</span>(i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)<br><span class="hljs-comment line-number">4.</span>          <span class="hljs-keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];<br><span class="hljs-comment line-number">5.</span>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Integer(i);<br><span class="hljs-comment line-number">6.</span>}<br></code></pre>
+
+<p>看一下源码大家都会明白，对于-128到127之间的数，会进行缓存，Integer i5 = 127时，会将127进行缓存，下次再写Integer i6 = 127时，就会直接从缓存中取，就不会new了。所以22行的结果为true,而25行为false。</p>
+
+<p>对于27行和30行，因为对象不一样，所以为false。</p>
+
+<p>我对于以上的情况总结如下：</p>
+
+<p>①无论如何，Integer与new Integer不会相等。不会经历拆箱过程，i3的引用指向堆，而i4指向专门存放他的内存（常量池），他们的内存地址不一样，所以为false <br>
+  ②两个都是非new出来的Integer，如果数在-128到127之间，则是true,否则为false <br>
+  java在编译Integer i2 = 128的时候,被翻译成-&gt; Integer i2 = Integer.valueOf(128);而valueOf()函数会对-128到127之间的数进行缓存 <br>
+  ③两个都是new出来的,都为false <br>
+  ④int和integer(无论new否)比，都为true，因为会把Integer自动拆箱为int再去比</p>
+
+<p>如果大家觉得有什么不对的地方，欢迎指示。</p>
+
+<p>chu <br>
+ <a href="http://www.cnblogs.com/liuling/archive/2013/05/05/intAndInteger.html" target="_blank">http://www.cnblogs.com/liuling/archive/2013/05/05/intAndInteger.html</a></p></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>
