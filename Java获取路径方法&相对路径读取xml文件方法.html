@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><title>Java获取路径方法&相对路径读取xml文件方法</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3026" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3027" class="wmd-preview-section preview-content">
+
+<h1 id="java获取路径方法相对路径读取xml文件方法">Java获取路径方法&amp;相对路径读取xml文件方法</h1>
+
+</div><div id="wmd-preview-section-3028" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>request.getRealPath(<span class="hljs-string">"/"</span>);<span class="hljs-comment">//不推荐使用获取工程的根路径 </span><br><span class="hljs-comment line-number">2.</span>request.getRealPath(request.getRequestURI());<span class="hljs-comment">//获取jsp的路径，这个方法比较好用，可以直接在servlet和jsp中使用 </span><br><span class="hljs-comment line-number">3.</span>request.getSession().getServletContext().getRealPath(<span class="hljs-string">"/"</span>);<span class="hljs-comment">//获取工程的根路径，这个方法比较好用，可以直接在servlet和jsp中使用 </span><br><span class="hljs-comment line-number">4.</span><span class="hljs-keyword">this</span>.getClass().getClassLoader().getResource(<span class="hljs-string">""</span>).getPath();<span class="hljs-comment">//获取工程classes 下的路径，这个方法可以在任意jsp，servlet，java文件中使用，因为不管是jsp，servlet其实都是java程序，都是一个 class。所以它应该是一个通用的方法。</span><br></code></pre>
+
+<p>0、关于绝对路径和相对路径</p>
+
+<p>1.基本概念的理解绝对路径：绝对路径就是你的主页上的文件或目录在硬盘上真正的路径，(URL和物理路径)例 如：C:xyz est.txt 代表了test.txt文件的绝对路径。<a href="http://www.sun.com/index.htm" target="_blank">http://www.sun.com/index.htm</a>也代表了一个URL绝对路径。相对路径：相对与某个基 准目录的路径。包含Web的相对路径（HTML中的相对目录），例如：在Servlet中，”/”代表Web应用的跟目录。和物理路径的相对表示。例 如：”./” 代表当前目录,”../”代表上级目录。这种类似的表示，也是属于相对路径。另外关于URI，URL,URN等内容，请参考RFC相关文档标准。RFC 2396: Uniform Resource Identifiers (URI): Generic Syntax,(<a href="http://www.ietf.org/rfc/rfc2396.txt)2" target="_blank">http://www.ietf.org/rfc/rfc2396.txt)2</a>.关于JSP/Servlet中的相对路径和绝对路径。 2.1服务器端的地址服务器端的相对地址指的是相对于你的web应用的地址，这个地址是在服务器端解析的（不同于html和javascript中的相对 地址，他们是由客户端浏览器解析的）</p>
+
+<p>1、request.getRealPath</p>
+
+<p>方法：request.getRealPath(“/”)  <br>
+得到的路径：C:\Program Files\Apache Software Foundation\Tomcat 5.5\webapps\strutsTest\</p>
+
+<p>方法：request.getRealPath(“.”)  <br>
+得到的路径：C:\Program Files\Apache Software Foundation\Tomcat 5.5\webapps\strutsTest.</p>
+
+<p>方法：request.getRealPath(“”)  <br>
+得到的路径：C:\Program Files\Apache Software Foundation\Tomcat 5.5\webapps\strutsTest</p>
+
+<p>request.getRealPath(“web.xml”)  <br>
+C:\Program Files\Apache Software Foundation\Tomcat 5.5\webapps\strutsTest\web.xml</p>
+
+<p>2、request.getParameter(“”);  <br>
+    ActionForm.getMyFile();</p>
+
+<p>方法：String filepath = request.getParameter(“myFile”);  <br>
+得到的路径：D:\VSS安装目录\users.txt</p>
+
+<p>方法：String filepath = ActionForm.getMyFile();  <br>
+得到的路径：D:\VSS安装目录\users.txt</p>
+
+<hr>
+
+<p>strutsTest 为工程名</p>
+
+<p>myFile 在ActionForm中，为private String myFile;  <br>
+在jsp页面中：为</p>
+
+<hr>
+
+<p>3、获得系统路径</p>
+
+<p>在Application中:  <br>
+System.getProperty(“user.dir”)</p>
+
+<p>在Servlet中:  <br>
+ServletContext servletContext = config.getServletContext();  <br>
+String rootPath = servletContext.getRealPath(“/”);</p>
+
+<p>在jsp中:  <br>
+application.getRealPath(“”)</p>
+
+<p>4、其他1</p>
+
+<p>1.可以在servlet的init方法里</p>
+
+<p>String path = getServletContext().getRealPath(“/”);</p>
+
+<p>这将获取web项目的全路径</p>
+
+<p>例如 :E:\eclipseM9\workspace\tree\</p>
+
+<p>tree是我web项目的根目录</p>
+
+<p>2.你也可以随时在任意的class里调用</p>
+
+<p>this.getClass().getClassLoader().getResource(“”).getPath();</p>
+
+<p>这将获取 到classes目录的全路径</p>
+
+<p>例如 : /D:/workspace/strutsTest/WebRoot/WEB-INF/classes/</p>
+
+<p>还有 this.getClass().getResource(“”).getPath().toString();</p>
+
+<p>这将获取 到 /D:/workspace/strutsTest/WebRoot/WEB-INF/classes/bl/</p>
+
+<p>这个方法也可以不在web环境里确定路径,比较好用</p>
+
+<p>3.request.getContextPath();</p>
+
+<p>获得web根的上下文环境</p>
+
+<p>如 /tree</p>
+
+<p>tree是我的web项目的root context</p>
+
+<p>5、其他2</p>
+
+<p>java获取路径几种途径- - <br>
+      1. jdk如何判断程序中的路径呢？一般在编程中，文件路径分为相对路径和绝对路径，绝对路径是比较好处理的，但是不灵活，因此我们在编程中对文件进行操作的时候，一般都是读取文件的相对路径，</p>
+
+<p>相对路径可能会复杂一点，但是也是比较简单的，相对的路径，主要是相对于谁，可以是类加载器的路径，或者是当前 java文件下的路径，在jsp编程中可能是相对于站点的路径，相对于站点的路径，我们可以通过 getServletContext().getRealPath(“\”) 和request.getRealPath(“\”):这个是取得站点的绝对路径； 而getContextPath():取得站点的虚拟路径；</p>
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs python"><span class="hljs-comment line-number">1.</span>  <span class="hljs-number">2.</span> <span class="hljs-class"><span class="hljs-keyword">class</span>.<span class="hljs-title">getClassLoader</span>.<span class="hljs-title">getPath</span><span class="hljs-params">()</span>:</span>取得类加载器的路径：什么是类加载器呢？ 一般类加载器有系统的和用户自己定义的；系统的ClassLoader就是jdk提供的，他的路径就是jdk下的路径，或者在 jsp编程，比如Tomcat ，取得的类加载器的位置就是tomaca自己设计的加载器的路径，<br></code></pre>
+
+<p>明白了这些之后，对于文件路径的操作就会相当的清楚，我们在编程的时候，只要想清楚我们所操作的文件是相对于什么路径下的，取得相对路径就可以了.</p>
+
+<p>6、总结</p>
+
+<p>1、获取web服务器下的文件路径  <br>
+request.getRealPath(“/”)  <br>
+application.getRealPath(“”)【jsp中 】  <br>
+ServletContext().getRealPath(“”)</p>
+
+<p>System.getProperty(“user.dir”)【不同位置调用，获取的路径是动态变化的】</p>
+
+<p>2、获取本地路径</p>
+
+<p>jsp中，</p>
+
+<p>request.getParameter(“myFile”);  <br>
+ActionForm.getMyFile();  <br>
+获取的值相同：如D:\VSS安装目录\users.txt</p>
+
+<hr>
+
+<p>this.getClass().getClassLoader().getResource(“”).getPath();  <br>
+＝＝/D:/workspace/strutsTest/WebRoot/WEB-INF/classes/  <br>
+this.getClass().getResource(“”).getPath().toString();  <br>
+＝＝/D:/workspace/strutsTest/WebRoot/WEB-INF/classes/bl/</p>
+
+<p>3、获取相对路径</p>
+
+<p>request.getContextPath();</p>
+
+<p>如：/strutsTest</p>
+
+<p>java使用相对路径读取xml文件 <br>
+博客分类：</p>
+
+<p>java <br>
+javaXMLJavaWeb </p>
+
+<p>一、xml文件一般的存放位置有三个：  <br>
+1.放在WEB-INF下；  <br>
+2.xml文件放在/WEB-INF/classes目录下或classpath的jar包中；  <br>
+3.放在与解析它的java类同一个包中，不一定是classpath； </p>
+
+<p>二、相对应的两种使用相对路径的读取方法： </p>
+
+<p>方法一：（未验证）  <br>
+将xml文件放在WEB-INF目录下，然后  <br>
+程序代码：  <br>
+InputStream is=getServletContext().getResourceAsStream( “/WEB-INF/xmlfile.xml” ); </p>
+
+<p>方法二：将xml文件放在/WEB-INF/classes目录下或classpath的jar包中，则可以使用ClassLoader的静态方法getSystemResourceAsStream(String s)读取；  <br>
+程序代码：  <br>
+String s_xmlpath=”com\xml\hotspot.xml”;  <br>
+InputStream in=ClassLoader.getSystemResourceAsStream(s_xmlpath); </p>
+
+<p>方法三：xml在随意某个包路径下：  <br>
+String s_xmlpath=”com\xml\hotspot.xml”;  <br>
+ClassLoader classLoader=HotspotXmlParser.class.getClassLoader();  <br>
+InputStream in=classLoader.getResourceAsStream(s_xmlpath);</p></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>

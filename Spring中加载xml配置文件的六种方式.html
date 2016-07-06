@@ -1,0 +1,70 @@
+<!DOCTYPE html><html><head><title>Spring中加载xml配置文件的六种方式</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3127" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3128" class="wmd-preview-section preview-content">
+
+<h1 id="spring中加载xml配置文件的六种方式">Spring中加载xml配置文件的六种方式</h1>
+
+<p>Spring中加载xml配置文件的方式,我总结的有6种, xml是最常见的spring 应用系统配置源。Spring中的几种容器都支持使用xml装配bean，包括： </p>
+
+<blockquote>
+  <p>XmlBeanFactory,ClassPathXmlApplicationContext,FileSystemXmlApplicationContext,XmlWebApplicationContext</p>
+</blockquote>
+
+</div><div id="wmd-preview-section-3129" class="wmd-preview-section preview-content">
+
+<h2 id="xmlbeanfactory-引用资源">XmlBeanFactory 引用资源</h2>
+
+</div><div id="wmd-preview-section-3130" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs dart"><span class="hljs-comment line-number">1.</span>Resource resource = <span class="hljs-keyword">new</span> ClassPathResource(<span class="hljs-string">"appcontext.xml"</span>); <br><span class="hljs-comment line-number">2.</span>BeanFactory <span class="hljs-literal">factory</span> = <span class="hljs-keyword">new</span> XmlBeanFactory(resource); <br></code></pre>
+
+</div><div id="wmd-preview-section-3131" class="wmd-preview-section preview-content">
+
+<h2 id="classpathxmlapplicationcontext-编译路径">ClassPathXmlApplicationContext  编译路径</h2>
+
+</div><div id="wmd-preview-section-3132" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs dart"><span class="hljs-comment line-number">1.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"classpath:appcontext.xml"</span>); <br><span class="hljs-comment line-number">2.</span><span class="hljs-comment">// src目录下的 </span><br><span class="hljs-comment line-number">3.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"appcontext.xml"</span>); <br><span class="hljs-comment line-number">4.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-keyword">new</span> <span class="hljs-built_in">String</span>[] {<span class="hljs-string">"bean1.xml"</span>,<span class="hljs-string">"bean2.xml"</span>}); <br><span class="hljs-comment line-number">5.</span><span class="hljs-comment">// src/conf 目录下的 </span><br><span class="hljs-comment line-number">6.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"conf/appcontext.xml"</span>); <br><span class="hljs-comment line-number">7.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"file:G:/Test/src/appcontext.xml"</span>); <br></code></pre>
+
+</div><div id="wmd-preview-section-3133" class="wmd-preview-section preview-content">
+
+<h2 id="用文件系统的路径">用文件系统的路径</h2>
+
+</div><div id="wmd-preview-section-3134" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs dart"><span class="hljs-comment line-number">1.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> FileSystemXmlApplicationContext(<span class="hljs-string">"src/appcontext.xml"</span>); <br><span class="hljs-comment line-number">2.</span><span class="hljs-comment">//使用了  classpath:  前缀,作为标志,  这样,FileSystemXmlApplicationContext 也能够读入classpath下的相对路径 </span><br><span class="hljs-comment line-number">3.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> FileSystemXmlApplicationContext(<span class="hljs-string">"classpath:appcontext.xml"</span>); <br><span class="hljs-comment line-number">4.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> FileSystemXmlApplicationContext(<span class="hljs-string">"file:G:/Test/src/appcontext.xml"</span>); <br><span class="hljs-comment line-number">5.</span>ApplicationContext <span class="hljs-literal">factory</span>=<span class="hljs-keyword">new</span> FileSystemXmlApplicationContext(<span class="hljs-string">"G:/Test/src/appcontext.xml"</span>); <br></code></pre>
+
+</div><div id="wmd-preview-section-3135" class="wmd-preview-section preview-content">
+
+<h2 id="xmlwebapplicationcontext是专为web工程定制的">XmlWebApplicationContext是专为Web工程定制的</h2>
+
+</div><div id="wmd-preview-section-3136" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs dns"><span class="hljs-comment line-number">1.</span>ServletContext servletContext = request.getSession().getServletContext()<span class="hljs-comment">; </span><br><span class="hljs-comment line-number">2.</span>ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext )<span class="hljs-comment">; </span><br></code></pre>
+
+</div><div id="wmd-preview-section-3137" class="wmd-preview-section preview-content">
+
+<h2 id="使用beanfactory">使用BeanFactory</h2>
+
+</div><div id="wmd-preview-section-3138" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs vim"><span class="hljs-comment line-number">1.</span>BeanDefinitionRegistry <span class="hljs-keyword">reg</span> = <span class="hljs-keyword">new</span> DefaultListableBeanFactory(); <br><span class="hljs-comment line-number">2.</span>XmlBeanDefinitionReader reader = <span class="hljs-keyword">new</span> XmlBeanDefinitionReader(<span class="hljs-keyword">reg</span>); <br><span class="hljs-comment line-number">3.</span>reader.loadBeanDefinitions(<span class="hljs-keyword">new</span> ClassPathResource(<span class="hljs-string">"bean1.xml"</span>)); <br><span class="hljs-comment line-number">4.</span>reader.loadBeanDefinitions(<span class="hljs-keyword">new</span> ClassPathResource(<span class="hljs-string">"bean2.xml"</span>)); <br><span class="hljs-comment line-number">5.</span>BeanFactory <span class="hljs-keyword">bf</span>=(BeanFactory)<span class="hljs-keyword">reg</span>; <br></code></pre>
+
+</div><div id="wmd-preview-section-3139" class="wmd-preview-section preview-content">
+
+<h2 id="web-应用启动时加载多个配置文件">Web 应用启动时加载多个配置文件</h2>
+
+<p>通过ContextLoaderListener 也可加载多个配置文件，在web.xml文件中利用  <br>
+元素来指定多个配置文件位置，其配置如下:  <br>
+Java代码  收藏代码</p>
+
+</div><div id="wmd-preview-section-3140" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-xml hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-tag">&lt;<span class="hljs-title">context-param</span>&gt;</span>  <br><span class="hljs-comment line-number">2.</span>    <span class="hljs-comment">&lt;!-- Context Configuration locations for Spring XML files --&gt;</span>  <br><span class="hljs-comment line-number">3.</span>       <span class="hljs-tag">&lt;<span class="hljs-title">param-name</span>&gt;</span>contextConfigLocation<span class="hljs-tag">&lt;/<span class="hljs-title">param-name</span>&gt;</span>  <br><span class="hljs-comment line-number">4.</span>       <span class="hljs-tag">&lt;<span class="hljs-title">param-value</span>&gt;</span>  <br><span class="hljs-comment line-number">5.</span>       ./WEB-INF/**/Appserver-resources.xml,  <br><span class="hljs-comment line-number">6.</span>       classpath:config/aer/aerContext.xml,  <br><span class="hljs-comment line-number">7.</span>       classpath:org/codehaus/xfire/spring/xfire.xml,  <br><span class="hljs-comment line-number">8.</span>       ./WEB-INF/**/*.spring.xml  <br><span class="hljs-comment line-number">9.</span>       <span class="hljs-tag">&lt;/<span class="hljs-title">param-value</span>&gt;</span>  <br><span class="hljs-comment line-number">10.</span>   <span class="hljs-tag">&lt;/<span class="hljs-title">context-param</span>&gt;</span>  <br></code></pre>
+
+<p>这个方法加载配置文件的前提是已经知道配置文件在哪里，虽然可以利用“*”通配符，但灵活度有限。 </p></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>

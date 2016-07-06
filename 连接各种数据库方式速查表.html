@@ -1,0 +1,68 @@
+<!DOCTYPE html><html><head><title>连接各种数据库方式速查表</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3075" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3076" class="wmd-preview-section preview-content">
+
+<h1 id="连接各种数据库方式速查表">连接各种数据库方式速查表</h1>
+
+<p>下面罗列了各种数据库使用JDBC连接的方式，可以作为一个手册使用。</p>
+
+<ul><li>Oracle8/8i/9i数据库（thin模式）</li>
+</ul>
+
+</div><div id="wmd-preview-section-3077" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"oracle.jdbc.driver.OracleDriver"</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url=<span class="hljs-string">"jdbc:oracle:thin:@localhost:1521:orcl"</span>; <span class="hljs-comment">//orcl为数据库的SID</span><br><span class="hljs-comment line-number">3.</span>String user=<span class="hljs-string">"test"</span>;<br><span class="hljs-comment line-number">4.</span>String password=<span class="hljs-string">"test"</span>;<br><span class="hljs-comment line-number">5.</span>Connection conn= DriverManager.getConnection(url,user,password);<br></code></pre>
+
+<ul><li>DB2数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3078" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"com.ibm.db2.jdbc.app.DB2Driver "</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url=<span class="hljs-string">"jdbc:db2://localhost:5000/sample"</span>; <span class="hljs-comment">//sample为你的数据库名</span><br><span class="hljs-comment line-number">3.</span>String user=<span class="hljs-string">"admin"</span>;<br><span class="hljs-comment line-number">4.</span>String password=<span class="hljs-string">""</span>;<br><span class="hljs-comment line-number">5.</span>Connection conn= DriverManager.getConnection(url,user,password);<br></code></pre>
+
+<ul><li>Sql Server7.0/2000数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3079" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"com.microsoft.jdbc.sqlserver.SQLServerDriver"</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url=<span class="hljs-string">"jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=mydb"</span>;<br><span class="hljs-comment line-number">3.</span><span class="hljs-comment">//mydb为数据库</span><br><span class="hljs-comment line-number">4.</span>String user=<span class="hljs-string">"sa"</span>;<br><span class="hljs-comment line-number">5.</span>String password=<span class="hljs-string">""</span>;<br><span class="hljs-comment line-number">6.</span>Connection conn= DriverManager.getConnection(url,user,password);<br></code></pre>
+
+<ul><li>Sybase数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3080" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"com.sybase.jdbc.SybDriver"</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url =<span class="hljs-string">"jdbc:sybase:Tds:localhost:5007/myDB"</span>;<span class="hljs-comment">//myDB为你的数据库名</span><br><span class="hljs-comment line-number">3.</span>Properties sysProps = System.getProperties();<br><span class="hljs-comment line-number">4.</span>SysProps.put(<span class="hljs-string">"user"</span>,<span class="hljs-string">"userid"</span>);<br><span class="hljs-comment line-number">5.</span>SysProps.put(<span class="hljs-string">"password"</span>,<span class="hljs-string">"user_password"</span>);<br><span class="hljs-comment line-number">6.</span>Connection conn= DriverManager.getConnection(url, SysProps);<br></code></pre>
+
+<ul><li>Informix数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3081" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"com.informix.jdbc.IfxDriver"</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url = <span class="hljs-string">"jdbc:informix-sqli://123.45.67.89:1533/myDB:INFORMIXSERVER=myserver;<br><span class="hljs-comment line-number">3.</span>user=testuser;password=testpassword"</span>; <span class="hljs-comment">//myDB为数据库名</span><br><span class="hljs-comment line-number">4.</span>Connection conn= DriverManager.getConnection(url);<br></code></pre>
+
+<ul><li>MySQL数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3082" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"org.gjt.mm.mysql.Driver"</span>).newInstance();<br><span class="hljs-comment line-number">2.</span>String url =<span class="hljs-string">"jdbc:mysql://localhost/myDB?user=soft&amp;password=soft1234&amp;useUnicode=true&amp;characterEncoding=8859_1"</span><br><span class="hljs-comment line-number">3.</span><span class="hljs-comment">//myDB为数据库名</span><br><span class="hljs-comment line-number">4.</span>Connection conn= DriverManager.getConnection(url);<br></code></pre>
+
+<ul><li>PostgreSQL数据库</li>
+</ul>
+
+</div><div id="wmd-preview-section-3083" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>String url =<span class="hljs-string">"jdbc:postgresql://localhost/myDB"</span> <span class="hljs-comment">//myDB为数据库名</span><br><span class="hljs-comment line-number">2.</span>String user=<span class="hljs-string">"myuser"</span>;<br><span class="hljs-comment line-number">3.</span>String password=<span class="hljs-string">"mypassword"</span>;<br><span class="hljs-comment line-number">4.</span>Connection conn= DriverManager.getConnection(url,user,password);<br></code></pre>
+
+<ul><li>access数据库直连用ODBC的</li>
+</ul>
+
+</div><div id="wmd-preview-section-3084" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-java hljs"><span class="hljs-comment line-number">1.</span>Class.forName(<span class="hljs-string">"sun.jdbc.odbc.JdbcOdbcDriver"</span>) ;<br><span class="hljs-comment line-number">2.</span>String url=<span class="hljs-string">"jdbc:odbc:Driver={MicroSoft Access Driver (*.mdb)};DBQ="</span>+application.getRealPath(<span class="hljs-string">"/Data/ReportDemo.mdb"</span>);<br><span class="hljs-comment line-number">3.</span>Connection conn = DriverManager.getConnection(url,<span class="hljs-string">""</span>,<span class="hljs-string">""</span>);<br><span class="hljs-comment line-number">4.</span>Statement stmtNew=conn.createStatement() ;<br></code></pre></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>

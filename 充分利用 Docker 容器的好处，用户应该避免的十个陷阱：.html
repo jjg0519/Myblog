@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><title>充分利用 Docker 容器的好处，用户应该避免的十个陷阱：</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3182" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3183" class="wmd-preview-section preview-content">
+
+<h1 id="充分利用-docker-容器的好处用户应该避免的十个陷阱">充分利用 Docker 容器的好处，用户应该避免的十个陷阱：</h1>
+
+<ul><li><p>不要在容器内存储数据 —— 容器可以被停止、销毁或者取代。运行在容器中的应用1.0版本应该能够轻易地被1.1版本所取代，且不产生任何影响或数据丢失。因此，如果你需要存储数据，请将其存储在卷组(volume)中。在这种情况下，你要格外小心两个容器向同一卷组写入数据的情况，因为这很容易导致数据污染。总之，要确保自己的应用向共享的数据存储区填写数据。</p></li>
+<li><p>不要将应用分开发布 —— 有些人会将容器视为虚拟机，他们中的大部分人认为，应该在现有的运行容器中部署应用。在开发阶段，因为需要不断地修改配置并调试应用，这样做无可厚非。但是，当持续交付管道行进至 QA 与生产阶段时，不应该把镜像和应用分开。记住：容器是不可变的。</p></li>
+<li><p>不要创建太大的镜像 —— 镜像越大，越难以分发。确保只留有运行应用或进程所需的文件和库。不要安装不必要的包或运行“update”(yum update)指令下载太多文件到新的镜像层。</p></li>
+</ul>
+
+<p><strong>更新：关于这条建议，有一篇解释更为详尽的文章：《保持小巧：细究 Docker 镜像大小》</strong></p>
+
+<ul><li><p>不要使用单层镜像 —— 为了有效利用分层的文件系统，总是为操作系统创建基础镜像层，此外，分别为用户名定义、运行时安装、配置、以及自己的应用创建不同的镜像层。这样一来，重现、管理以及传送镜像会变得更为简单。</p></li>
+<li><p>不用为运行中的容器创建镜像 —— 换句话说，不要使用 “docker commit” 指令创建镜像。这种创建镜像的方法是不可重现的，应该完全避免。相反，总是使用 Dockerfile 或任何 S2I (source-to-image，源码到镜像) —— 完全可重现的方法来创建镜像。这样一来，如果你将 Dockerfile 保存在源码存储控制库(git)内，就可以追踪其后续变化。</p></li>
+<li><p>不要单独使用“latest(最新)”标签 —— 最新标签就像 Maven 用户眼中的 “SNAPSHOT(快照)”。因为容器本身的分层式文件系统，我们鼓励使用标签。但是，你可不想在几个月后正打算创建镜像时，却惊讶地发现应用无法运行，而原因居然是一个父层(Dockerfile 中的 FROM)已经被无法向后兼容的新版取代，或是创建缓存中检索出的“最新”版本是错的。此外，由于你无法追踪当前运行镜像的版本，“最新”标签也不应该在生产环境中部署容器时使用。</p></li>
+<li><p>不要在一个容器内运行多个进程 —— 容器在运行单一进程(http 后台进程、应用服务器、数据库)时几乎无可挑剔，但是，如果运行多个进程，你可能会在管理、检索日志以及独个更新进程时遇到麻烦。</p></li>
+<li><p>不要在镜像中存储凭证 —— 使用环境变量。不要将镜像中的任何用户名或密码写死。使用环境变量从容器外部检索这些信息。Postgress 镜像就是践行该准则的好榜样。</p></li>
+<li><p>不要以 root 用户运行进程 —— “默认情况下，docker 容器以 root 权限运行。(…)随着 Docker 的不断完善，更多安全的默认选项会逐渐出现。就当下而言，要求 root 权限对有些用户而言比较危险，可能无法在所有环境中实现。你的镜像应该使用 USER 指令为容器确定一个非 root 运行权限。”（摘自《Docker 镜像作者指南》）</p></li>
+<li><p>不要依赖 IP 地址 —— 每个容器都有其内部 IP 地址，该地址可能因为启动或停止容器而发生改变。如果你的应用或微服务需要与另一个容器交换消息，应该使用环境变量在容器间传送合适的主机名与端口号。</p></li>
+</ul></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>

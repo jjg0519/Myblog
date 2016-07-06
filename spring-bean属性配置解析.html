@@ -1,0 +1,124 @@
+<!DOCTYPE html><html><head><title>spring-bean属性配置解析</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        <div id="wmd-preview" class="preview-content"></div>
+                    <div id="wmd-preview-section-3004" class="wmd-preview-section preview-content">
+
+</div><div id="wmd-preview-section-3005" class="wmd-preview-section preview-content">
+
+<h1 id="spring-bean属性配置解析">spring-bean属性配置解析</h1>
+
+<div><div class="toc"><div class="toc">
+<ul>
+<li><a href="#spring-bean属性配置解析">spring-bean属性配置解析</a><ul>
+<li><ul>
+<li><a href="#autowire属性值">autowire属性值</a></li>
+<li><a href="#depends-on">depends-on</a></li>
+<li><a href="#parent">parent</a></li>
+<li><a href="#dependency-check属性值">dependency-check属性值</a></li>
+<li><a href="#singleton属性值指定此java-bean是否采用单例singleton模式">singleton属性值指定此Java Bean是否采用单例（Singleton）模式</a></li>
+<li><a href="#init-method-初始化方法">init-method 初始化方法，</a></li>
+<li><a href="#destroy-method-销毁方法">destroy-method 销毁方法</a></li>
+<li><a href="#lazy-init属性值">lazy-init属性值</a></li>
+<li><a href="#factory-bean">factory-bean</a></li>
+<li><a href="#scope属性值">scope属性值</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+</div><div id="wmd-preview-section-3006" class="wmd-preview-section preview-content">
+
+<h3 id="autowire属性值">autowire属性值</h3>
+
+<p>byName 根据Bean定义时的“id”属性上指定的别名与Setter名称是否一致进行自动装配 <br>
+byType 根据PoJo的setXXX()方法所接受的类型判断bean定义文件是否定义有类似的类型对象进行自动装配 <br>
+constructor Spring容器比对容器中的Bean实例类型及相关的构造方法上的参数类型是否符合进行自动装配 <br>
+autodetect 先进行constructor自动装配，若缺省，则进行byType自动装配 <br>
+no不进行自动装配</p>
+
+</div><div id="wmd-preview-section-3007" class="wmd-preview-section preview-content">
+
+<h3 id="depends-on">depends-on</h3>
+
+<p>若A depends-on B 意思是实例化A之前必须先实例化B，但A不需要持有B的实例 <br>
+abstract属性值 <br>
+false默认 <br>
+ture表示抽象Bean，ApplicationContext预初始化时忽略所有抽象Bean定义</p>
+
+</div><div id="wmd-preview-section-3008" class="wmd-preview-section preview-content">
+
+<h3 id="parent">parent</h3>
+
+<p>表示该Bean为子Bean，其值指向父Bean，重用父Bean已实现的依赖</p>
+
+</div><div id="wmd-preview-section-3009" class="wmd-preview-section preview-content">
+
+<h3 id="dependency-check属性值">dependency-check属性值</h3>
+
+<p>simple 只检查简单的属性是否完成依赖关系 <br>
+objects 检查对象类型的属性是否完成依赖关系 <br>
+all检查全部的属性是否完成依赖关系 <br>
+none默认值，表示不检查依赖性</p>
+
+</div><div id="wmd-preview-section-3010" class="wmd-preview-section preview-content">
+
+<h3 id="singleton属性值指定此java-bean是否采用单例singleton模式">singleton属性值指定此Java Bean是否采用单例（Singleton）模式</h3>
+
+<p>false则通过BeanFactory获取此Java Bean实例时，BeanFactory每次都将创建一个新的实例返回。 <br>
+true(默认) 则在BeanFactory作用范围内，只维护此Java Bean的一个实例，代码通过BeanFactory获得此Java Bean实例的引用。</p>
+
+</div><div id="wmd-preview-section-3011" class="wmd-preview-section preview-content">
+
+<h3 id="init-method-初始化方法">init-method 初始化方法，</h3>
+
+<p>此方法将在BeanFactory创建JavaBean实例和属性set注入之后，在向应用层返回引用之前执行。一般用于一些资源的初始化工作。</p>
+
+</div><div id="wmd-preview-section-3012" class="wmd-preview-section preview-content">
+
+<h3 id="destroy-method-销毁方法">destroy-method 销毁方法</h3>
+
+<p>此方法将在BeanFactory销毁的时候执行，一般用于资源释放。</p>
+
+</div><div id="wmd-preview-section-3013" class="wmd-preview-section preview-content">
+
+<h3 id="lazy-init属性值">lazy-init属性值</h3>
+
+<p>true 延迟加载，也就是IoC 容器将第一次被用到时才开始实例化 <br>
+false默认</p>
+
+</div><div id="wmd-preview-section-3014" class="wmd-preview-section preview-content">
+
+<h3 id="factory-bean">factory-bean</h3>
+
+<p>通过实例工厂方法创建bean，class属性必须为空，factory-bean属性必须指定一个bean的名字，这个bean一定要在当前的bean工厂或者父bean工厂中，并包含工厂方法。而工厂方法本身通过factory-method属性设置。 <br>
+factory-method 定义工厂方法，若是class属性指向工厂类，该工厂类包含的工厂方法须是static</p>
+
+</div><div id="wmd-preview-section-3015" class="wmd-preview-section preview-content">
+
+<h3 id="scope属性值">scope属性值</h3>
+
+<p>scope可以取值： </p>
+
+<ul><li>singleton:每次调用getBean的时候返回相同的实例.这个是默认,也就是单实例</li>
+<li>prototype:每次调用getBean的时候返回不同的实例.这个是多实例</li>
+</ul>
+
+<p>还可取值request、session、global session等（不常用）</p>
+
+<p>具体的用法如下</p>
+
+</div><div id="wmd-preview-section-3016" class="wmd-preview-section preview-content">
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs nimrod"><span class="hljs-comment line-number">1.</span>&lt;bean id=<span class="hljs-string">"userDao"</span> class=<span class="hljs-string">"com.test.dao.impl.UserDAOImpl"</span> scope=<span class="hljs-string">"singleton"</span>/&gt;<br><span class="hljs-comment line-number">2.</span> &lt;bean id=<span class="hljs-string">"userService"</span> class=<span class="hljs-string">"com.test.service.impl.UserServiceImpl"</span> scope=<span class="hljs-string">"prototype"</span>&gt;<br><span class="hljs-comment line-number">3.</span>  &lt;property name=<span class="hljs-string">"userDao"</span> <span class="hljs-keyword">ref</span>=<span class="hljs-string">"userDao"</span>/&gt;<br><span class="hljs-comment line-number">4.</span> &lt;/bean&gt;<br></code></pre>
+
+<p>这个怎么需要看你具体的时机…如果你的bean是无状态的.那么单实例就可以了…如果Bean是有状态的,那么你最好设置成多实例的.因为这样可以解决线程安全问题.</p>
+
+<p>id: Bean的唯一标识名。它必须是合法的XML ID，在整个XML文档中唯一。  <br>
+name: 用来为id创建一个或多个别名。它可以是任意的字母符合。多个别名之间用逗号或空格分开。  <br>
+class: 用来定义类的全限定名（包名＋类名）。只有子类Bean不用定义该属性</p></div><div id="wmd-preview-section-footnotes" class="preview-content"></div></div></body></html>
