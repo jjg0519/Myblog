@@ -1,0 +1,415 @@
+#### proxy
+lighttpd:
+  image: ubuntu-lighttpd
+  hostname: lighttpd
+  privileged: true
+  volumes:
+    - /opt/web/tomcat.xmanager/xmanager/resources/upload:/var/www
+  ports:
+    - "82:80"
+    
+nginx:
+  image: ubuntu-nginx
+  hostname: nginx
+  privileged: true
+  volumes:
+    - /opt/pass/nginx_config:/etc/nginx/conf.d
+    - /opt/logs/nginx:/var/log/nginx
+  ports:
+    - "88:80"
+    
+squid-3128:
+  image: ubuntu-squid
+  hostname: squid-3128
+  privileged: true
+  volumes:
+    - /opt/pass/squid_config/3128:/etc/squid3
+  ports:
+    - "3128:3128"
+    
+squid-3138:
+  image: ubuntu-squid
+  hostname: squid-3138
+  privileged: true
+  volumes:
+    - /opt/pass/squid_config/3138:/etc/squid3
+  ports:
+    - "3138:3138"
+    
+squid-3148:
+  image: ubuntu-squid
+  hostname: squid-3148
+  privileged: true
+  volumes:
+    - /opt/pass/squid_config/3148:/etc/squid3
+  ports:
+    - "3148:3148"
+    
+squid-3158:
+  image: ubuntu-squid
+  hostname: squid-3158
+  privileged: true
+  volumes:
+    - /opt/pass/squid_config/3158:/etc/squid3
+  ports:
+    - "3158:3158"
+
+### db
+mysql:
+  image: centos7-mysql
+  hostname: mysql
+  privileged: true
+  volumes:
+    - /opt/mysql-data:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=yk2015
+    - ROOT_PW=root
+  ports:
+    - "3307:3306"
+
+mysql_develop:
+  image: centos7-mysql
+  hostname: mysql_develop
+  privileged: true
+  volumes:
+    - /opt/mysql-data-devolop:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=yk2015
+    - ROOT_PW=root
+  ports:
+    - "3308:3306"
+
+mysql_test:
+  image: centos7-mysql
+  hostname: mysql_develop
+  privileged: true
+  volumes:
+    - /opt/mysql-data-test:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=yk2015
+    - ROOT_PW=root
+  ports:
+    - "3309:3306"
+
+
+### session db
+redis1:
+  image: redis1
+  hostname: redis1
+  environment:
+    - REDIS_PASS=**None**
+  ports:
+    - "6379:6379"
+
+###### cluster
+rabbit1:
+  image: centos7-rabbitmqs-server
+  hostname: rabbit1
+  ports:
+    - "5672:5672"
+    - "15672:15672"
+
+rabbit2:
+  image: centos7-rabbitmqs-server
+  hostname: rabbit2
+  links:
+    - rabbit1
+  environment: 
+   - CLUSTERED=true
+   - CLUSTER_WITH=rabbit1
+   - RAM_NODE=true
+  ports:
+      - "5673:5672"
+      - "15673:15672"
+
+rabbit3:
+  image: centos7-rabbitmqs-server
+  hostname: rabbit3
+  links:
+    - rabbit1
+    - rabbit2
+  environment: 
+   - CLUSTERED=true
+   - CLUSTER_WITH=rabbit1   
+  ports:
+        - "5674:5672"
+
+zookeepers:
+  image: centos7-zookeepers
+  ports:
+    - "2181:2181"
+    - "2182:2182"
+    - "2183:2183"
+    - "2887:2887"
+    - "2888:2888"
+    - "2889:2889"
+    - "3887:3887"
+    - "3888:3888"
+    - "3889:3889"
+    
+redis-cluster:
+  image: ubuntu-redis-cluster
+  ports:
+    - "7000:7000"
+    - "7001:7001"
+    - "7002:7002"
+    - "7003:7003"
+    - "7004:7004"
+    - "7005:7005"
+    - "7006:7006"
+    - "7007:7007"
+    
+dubbo:
+  image: centos7-tomcat7
+  links:
+    - zookeepers
+  volumes:
+    -  /opt/web/tomcat.dubbo:/usr/local/tomcat/webapps
+  ports:
+    - "8081:8080"
+    
+wxgatway:
+  image: centos7-tomcat7
+  links:
+   - mysql
+  volumes:
+    - /opt/web/tomcat.wxgatway:/usr/local/tomcat/webapps
+  ports:
+    - "28080:8080"
+
+xmanager:
+  image: centos7-tomcat7
+  links:
+   - mysql
+   - redis-cluster
+   - zookeepers
+  volumes:
+    -  /opt/web/tomcat.xmanager:/usr/local/tomcat/webapps
+  ports:
+    - "8090:8080"
+    
+# 独立的基础服务模块(一层)
+comm:
+  image: openjdk-7-jre
+  command: java -jar /opt/comm.jar
+  links:
+    - zookeepers
+    - mysql    
+  volumes:
+    - /opt/service/comm:/opt
+  ports:
+    - "20880:20880"
+
+mq:
+  image: openjdk-7-jre
+  command: java -jar /opt/mq.jar
+  links:
+    - zookeepers
+    - mysql
+    - rabbit1
+  volumes:
+    - /opt/service/mq:/opt
+  ports:
+    - "20887:20887"
+    
+xim:
+  image: openjdk-7-jre
+  command: java -jar /opt/xim.jar
+  links:
+    - zookeepers
+    - mysql
+  volumes:
+    - /opt/service/xim:/opt
+  ports:
+    - "20901:20901"    
+    
+# 独立的业务模块(一层)    
+xorg:
+  image: openjdk-7-jre
+  command: java -jar /opt/xorg.jar
+  links:
+    - zookeepers
+    - mysql
+  volumes:
+    - /opt/service/xorg:/opt
+  ports:
+    - "20899:20899"    
+    
+product:
+  image: openjdk-7-jre
+  command: java -jar /opt/product.jar
+  links:
+    - zookeepers
+    - mysql
+  volumes:
+    - /opt/service/product:/opt
+  ports:
+    - "20881:20881"
+    
+program:
+  image: openjdk-7-jre
+  command: java -jar /opt/program.jar
+  links:
+    - zookeepers
+    - mysql
+  volumes:
+    - /opt/service/program:/opt
+  ports:
+    - "20882:20882"
+    
+analysis:
+  image: openjdk-7-jre
+  command: java -jar /opt/analysis/analysis.jar
+  links:
+    - zookeepers
+    - mysql
+  volumes:
+    - /opt/service/analysis:/opt
+  ports:
+    - "20885:20885" 
+
+# 依赖一层模块的服务(二层)
+security:
+  image: openjdk-7-jre
+  command: java -jar /opt/security.jar
+  links:
+    - zookeepers
+    - mysql
+    - xorg
+  volumes:
+    - /opt/service/security:/opt
+  ports:
+    - "20903:20903"
+
+customer:
+  image: openjdk-7-jre
+  command: java -jar /opt/customer.jar
+  links:
+    - zookeepers
+    - mysql
+    - program
+  volumes:
+    - /opt/service/customer:/opt
+  ports:
+    - "20886:20886"
+
+# 依赖二层模块的服务（三层）
+xsecurity:
+  image: centos7-tomcat7
+  links:
+    - zookeepers
+    - mysql
+    - security
+  volumes:
+    -  /opt/web/tomcat.xsecurity:/usr/local/tomcat/webapps
+  ports:
+    - "8098:8080"
+
+track:
+  image: openjdk-7-jre
+  command: java -jar /opt/track.jar
+  links:
+    - zookeepers
+    - mysql
+    - comm
+    - xorg
+    - program
+    - customer
+    - product
+  volumes:
+    - /opt/service/track:/opt
+  ports:
+    - "20884:20884"
+    
+xweixin:
+  image: centos7-tomcat7
+  links:
+    - zookeepers
+    - xorg
+    - program
+    - customer
+    - product
+  volumes:
+    -  /opt/web/tomcat.xweixin:/usr/local/tomcat/webapps
+  ports:
+    - "8082:8080"
+    
+# 依赖三层模块的服务（四层以上）
+xpush:
+  image: openjdk-7-jre
+  command: java -jar /opt/xpush.jar
+  links:
+    - zookeepers
+    - mysql
+    - track
+  volumes:
+    - /opt/service/xpush:/opt
+  ports:
+    - "20902:20902"  
+    
+xschedule:
+  image: openjdk-7-jre
+  command: java -jar /opt/xschedule.jar
+  links:
+    - zookeepers
+    - redis-cluster
+    - mysql
+    - xpush
+  volumes:
+    - /opt/service/xschedule:/opt
+  ports:
+    - "20883:20883"
+
+xweb:
+  image: centos7-tomcat7
+  links:
+    - zookeepers
+    - xschedule
+  volumes:
+    -  /opt/web/tomcat.xweb:/usr/local/tomcat/webapps
+  ports:
+    - "8100:8080"
+
+#-------- 其他  ----
+nexus:
+   image: sonatype/nexus
+   privileged: true
+   volumes: 
+    -  /opt/nexusdata:/nexus-data
+   ports:
+    - "8070:8081"
+    
+jenkins:
+   image: jenkins/mvn
+   privileged: true
+   volumes: 
+    -  /opt/jenkins_home:/var/jenkins_home
+    -  /usr/share/maven
+   ports:
+    - "8089:8080"
+    - "5000:5000"
+    
+jenkins2:
+   image: jekins2
+   privileged: true
+   volumes: 
+    -  /opt/jenkins_home:/var/jenkins_home
+    -  /opt/maven:/opt/maven
+   ports:
+    - "8088:8080"
+    - "5000:5000"
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+ 
