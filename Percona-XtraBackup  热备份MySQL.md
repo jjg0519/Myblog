@@ -100,9 +100,20 @@ xtrabackup -help
 #启动命令
 [root@shj-db01 ~]# /home/mysql/bin/mysqld_safe --defaults-file=/home/mysql/my.cnf &
 # 关闭命令
-[root@shj-db01 ~]# /home/mysql/bin/mysqladmin -uroot -p'shjdb2016' --socket=/home/mysql/run/mysql.sock shutdown
+[root@shj-db01 ~]# /home/mysql/bin/mysqladmin -uroot -p'123456' --socket=/home/mysql/run/mysql.sock shutdown
 #进入控制台
-[root@shj-db01 ~]# /home/mysql/bin/mysql -uroot -p'shjdb2016' --socket=/home/mysql/run/mysql.sock
+[root@shj-db01 ~]# /home/mysql/bin/mysql -uroot -p'123456' --socket=/home/mysql/run/mysql.sock
+
+#修改密码
+[root@shj-db01 ~]#/home/mysql/bin/mysqladmin -uroot -p123456 password yk2015  --socket=/home/mysql/run/mysql.sock
+
+use mysql;
+update user set password=password('yk2015') where user='root' and host='localhost'; 
+flush privileges; 
+
+##配置远程访问,修改密码只是本地修改
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yk2015' WITH GRANT OPTION;
+mysql>FLUSH PRIVILEGES;
 ```
 
 ### 数据备份前必选锁表或者停服务
