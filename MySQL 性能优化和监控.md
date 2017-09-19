@@ -317,6 +317,12 @@ not written to take advantage of the indexes you have.
 
 ## MySQL 统计查询
 
+### 查询某个库某个表有哪些字段
+
+```mysql
+select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = 'bid_performance_snapshot' and table_schema = 'ykee_bid';
+```
+
 ### 查询数据库中的存储过程和函数
 
  ```mysql
