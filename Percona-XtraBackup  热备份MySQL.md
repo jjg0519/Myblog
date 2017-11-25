@@ -67,11 +67,15 @@ https://www.percona.com/downloads/XtraBackup/LATEST/
 ### 安装依赖
 
 ```bash
+#  wget ftp://rpmfind.net/linux/atrpms/el6-x86_64/atrpms/stable/libev-4.04-2.el6.x86_64.rpm
+# rpm -ivh libev-4.04-2.el6.x86_64.rpm 
 # yum -y install perl perl-devel libaio libaio-devel perl-Time-HiRes perl-DBD-MySQL
 
 # yum install rsync -y
 
+# yum install -y numactl-devel 
 # yum -y install perl-Digest-MD5 
+#  yum install "perl(DBD::mysql)"
 ```
 
 ### 安装编译
@@ -542,6 +546,16 @@ yum install -y numactl-devel
 yum whatprovides libstdc++.so.6
 yum install libstdc++.so.6
 
+```
+
+### perl(DBD::mysql) is needed by percona-xtrabackup-24-2.4.6-2.el6.x86_64
+
+```bash
+[root@shj-132 soft]# rpm -ivh percona-xtrabackup-24-2.4.6-2.el6.x86_64.rpm 
+warning: percona-xtrabackup-24-2.4.6-2.el6.x86_64.rpm: Header V4 DSA/SHA1 Signature, key ID cd2efd2a: NOKEY
+error: Failed dependencies:
+	perl(DBD::mysql) is needed by percona-xtrabackup-24-2.4.6-2.el6.x86_64
+[root@shj-132 soft]# yum install "perl(DBD::mysql)"
 ```
 
 
