@@ -84,9 +84,13 @@ docker-compose的动作包括：
 $docker rm Name/ID  
 ```
 
+```bash
+
 docker-compose -f /opt/oso.yml up -d mysql_develop
 docker-compose -f /opt/oso.yml up -d mysql
 docker-compose -f /opt/oso.yml up -d zookeepers
 docker-compose -f /opt/oso.yml up -d redis_cluster
 docker-compose -f /opt/oso.yml up -d redis-cluster
 docker-compose -f /opt/oso.yml up -d jenkins2
+```
+
