@@ -125,7 +125,19 @@ Rows matched: 1  Changed: 1  Warnings: 0
 ###在binglog中去查找相关记录
 
 ```bash
+/home/mysql/bin/mysqlbinlog --no-defaults -v -v --base64-output=DECODE-ROWS /data/mysql/data/mysql-bin.000037 | grep -B 15 'start_work_apply' >/home/delete.txt 
+
+1. grep -A1 keyword filename
+找出filename中带有keyword的行，输出中除显示该行外，还显示之后的一行(After 1)
+2. grep -B1 keyword filename
+找出filename中带有keyword的行，输出中除显示该行外，还显示之前的一行(Before 1)
+
+ /home/mysql/bin/mysqlbinlog  --no-defaults -v -v --base64-output=decode-rows /data/mysql/data/mysql-bin.000037|grep -A 15 'DELETE FROM `ykee_biz`.`start_work_apply`'|more
+
+
 [root@localhost mysql]# mysqlbinlog --no-defaults --base64-output=decode-rows -v -v mysql-bin.000024 | sed -n '/### DELETE FROM db01.t1/,/COMMIT/p' > delete.txt
+
+
 
 
 [root@localhost mysql]# cat delete.txt 
