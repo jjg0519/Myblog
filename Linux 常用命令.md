@@ -50,12 +50,30 @@ data/
 6 directories, 0 files
 ```
 
+## 查找文件并显示文件大小
+
+```bash
+find / -name '*.log'  -exec ls -lh {} \;
+
+```
+
+## 文件夹下的文件让文件按大小
+
+```bash
+方法一：
+# ls -lhSl 长格式显示，h human readable模式，大小单位为M,G等易读格式，S size按大小排序。
+方法二：
+# du -h * | sort -n
+
+```
 
 
-## 查看文件夹大小
+
+##查找大于指定大小的文件：
 
 ```
 find . -type f -size +800M
+find / -type f -size +10G
 ```
 
 ## 查看文件夹大小
